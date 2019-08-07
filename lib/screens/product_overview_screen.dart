@@ -38,20 +38,33 @@ List<Product> loadedProducts = [
 class ProductOverviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(10.0),
-      itemCount: loadedProducts.length,
-      itemBuilder: (context, int)  {
-        return GridTile(
-          child: Image.network(loadedProducts[int].imageUrl),
-
-        );
-      },
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisSpacing: 10.0,
-        crossAxisSpacing: 5.0,
-        childAspectRatio:  3/2,
+    return Scaffold(
+      appBar: AppBar(),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(10.0),
+        itemCount: loadedProducts.length,
+        itemBuilder: (context, int) {
+          return GridTile(
+            child: Image.network(
+              loadedProducts[int].imageUrl,
+              fit: BoxFit.fill,
+            ),
+            footer: ListTile(
+              title: Text(
+                loadedProducts[int].title,
+                style: TextStyle(
+                    color: Colors.white, backgroundColor: Colors.black54),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        },
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 5.0,
+          childAspectRatio: 2 / 3,
+        ),
       ),
     );
   }
