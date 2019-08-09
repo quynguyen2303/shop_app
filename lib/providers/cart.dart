@@ -42,5 +42,23 @@ class Cart with ChangeNotifier {
         ),
       );
     }
+    notifyListeners();
+  }
+
+  int get itemsCount {
+    return _items.length;
+  }
+
+  double get itemsTotal {
+    var total = 0.0;
+    _items.forEach((key, cartItem) {
+      total += cartItem.quantity * cartItem.price;
+    });
+    return total;
+  }
+
+  void removeItem(String productId) {
+    _items.remove(productId);
+    notifyListeners();
   }
 }
