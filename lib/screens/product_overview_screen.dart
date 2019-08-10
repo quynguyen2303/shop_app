@@ -4,6 +4,8 @@ import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import 'package:provider/provider.dart';
 import 'cart_screen.dart';
+import '../widgets/app_drawer.dart';
+
 
 enum FilterOptions { Favorites, All }
 
@@ -17,7 +19,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cartData = Provider.of<Cart>(context, listen: false);
+    // final Cart cartData = Provider.of<Cart>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,10 +31,11 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               value: cartData.itemsCount.toString(),
             ),
             child: IconButton(
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(CartScreen.routeName);
-                }),
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
+            ),
           ),
           PopupMenuButton(
             icon: Icon(Icons.more_vert),
@@ -59,6 +62,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           ),
         ],
       ),
+      drawer: AppDrawer(),
       body: ProductsGrid(_showFavorite),
     );
   }
