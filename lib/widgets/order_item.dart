@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../providers/order.dart' as ord;
 import 'package:intl/intl.dart';
@@ -33,10 +35,17 @@ class _OrderItemState extends State<OrderItem> {
               },
             ),
           ),
-          // if (_expanded) Container(
-          //   height: ,
-          //   child: ,
-          // ),
+          if (_expanded) Container(
+            height: min(100, widget.order.products.length * 20.0 + 10),
+            child: ListView.builder(
+              itemCount: widget.order.products.length,
+              itemBuilder: (context, int) => Row(children: <Widget>[
+                Text(widget.order.products[int].title),
+                Text('\$${widget.order.products[int].price}'),
+              ],),
+
+            ),
+          ),
         ],
       ),
     );
