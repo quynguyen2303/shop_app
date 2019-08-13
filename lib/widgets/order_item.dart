@@ -39,16 +39,18 @@ class _OrderItemState extends State<OrderItem> {
           if (_expanded)
             Container(
               height: min(100, widget.order.products.length * 20.0 + 10),
-              child: ListView.builder(
-                itemCount: widget.order.products.length,
-                itemBuilder: (context, int) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(widget.order.products[int].title),
-                    Text('\$${widget.order.products[int].price}'),
-                  ],
-                ),
-              ),
+              child: ListView(
+                  padding: EdgeInsets.all(10.0),
+                  children: widget.order.products
+                      .map(
+                        (prod) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(prod.title),
+                            Text('\$${prod.price}'),
+                          ],
+                        ),
+                      ).toList()),
             ),
         ],
       ),
