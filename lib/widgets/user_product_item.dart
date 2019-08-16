@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../screens/user_edit_screen.dart';
 
 class UserProductItem extends StatelessWidget {
-  String imageUrl;
-  String title;
+  final String id;
+  final String imageUrl;
+  final String title;
 
-  UserProductItem(this.title, this.imageUrl);
+  UserProductItem(this.id, this.title, this.imageUrl);
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +23,18 @@ class UserProductItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.edit),
+                icon: Icon(Icons.edit, color: Theme.of(context).primaryColor),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(UserEditScreen.routeName);
+                  Navigator.of(context).pushNamed(UserEditScreen.routeName, arguments: id);
                 },
               ),
-              IconButton(icon: Icon(Icons.delete),
-              onPressed: () {
-
-              },)
+              IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).errorColor,
+                ),
+                onPressed: () {},
+              )
             ],
           ),
         ),
