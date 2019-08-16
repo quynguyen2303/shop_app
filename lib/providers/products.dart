@@ -70,8 +70,25 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
-  void addProduct(value) {
-    _items.add(value);
+  void addProduct(Product product) {
+    final newProduct = Product(
+      title: product.title,
+      price: product.price,
+      description: product.description,
+      imageUrl: product.imageUrl,
+      id: DateTime.now().toString(),
+    );
+    _items.add(newProduct);
+    notifyListeners();
+  }
+
+  void updateProduct(String id, Product product) {
+    var prodIndex = _items.indexWhere((prod) => prod.id == id);
+    if (prodIndex >= 0) {
+      _items[prodIndex] = product;
+    } else {
+      print('Cannot find the product id');
+    }
     notifyListeners();
   }
 
