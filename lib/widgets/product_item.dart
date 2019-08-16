@@ -45,7 +45,8 @@ class ProductItem extends StatelessWidget {
           ),
           title: Text(
             product.title,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.fade,
           ),
           trailing: IconButton(
             color: Theme.of(context).accentColor,
