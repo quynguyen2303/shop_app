@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screens/user_edit_screen.dart';
+
 class UserProductItem extends StatelessWidget {
   String imageUrl;
   String title;
@@ -22,7 +24,7 @@ class UserProductItem extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-
+                  Navigator.of(context).pushNamed(UserEditScreen.routeName);
                 },
               ),
               IconButton(icon: Icon(Icons.delete),
