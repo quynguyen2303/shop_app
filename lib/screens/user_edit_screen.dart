@@ -64,7 +64,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
     _form.currentState.save();
 
     // Check it is adding new product or editting product
-    if (_editedProduct.id != null) {
+    if (_editedProduct.id == null) {
       Provider.of<Products>(context, listen: false).addProduct(
         Product(
             title: _editedProduct.title,
