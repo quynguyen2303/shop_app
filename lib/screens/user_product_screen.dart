@@ -6,6 +6,8 @@ import '../widgets/user_product_item.dart';
 
 import '../providers/products.dart';
 
+import '../screens/user_edit_screen.dart';
+
 
 
 class UserProductScreen extends StatelessWidget {
@@ -20,7 +22,7 @@ class UserProductScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(icon: Icon(Icons.add),
           onPressed: () {
-
+            Navigator.of(context).pushNamed(UserEditScreen.routeName);
           },
           )
         ],
@@ -29,6 +31,7 @@ class UserProductScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: productsData.items.length,
         itemBuilder: (context, int) => UserProductItem(
+          productsData.items[int].id,
           productsData.items[int].title,
           productsData.items[int].imageUrl,
         ),
