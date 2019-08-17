@@ -56,7 +56,7 @@ class ProductItem extends StatelessWidget {
               Scaffold.of(context).hideCurrentSnackBar();
               Scaffold.of(context).showSnackBar(
                 SnackBar(
-                  backgroundColor: Colors.white,
+                  // backgroundColor: Colors.white,
                   content: Text(
                     'Added item to cart.',
                     textAlign: TextAlign.center,
