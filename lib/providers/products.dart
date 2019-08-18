@@ -92,6 +92,16 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeProduct(String id) {
+    var prodIndex = _items.indexWhere((prod) => prod.id == id);
+    if (prodIndex >= 0) {
+      _items.removeAt(prodIndex);
+    } else {
+      print('Cannot find the product id');
+    }
+    notifyListeners();
+  }
+
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
