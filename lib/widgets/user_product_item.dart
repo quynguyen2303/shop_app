@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/products.dart';
 
 import '../screens/user_edit_screen.dart';
 
@@ -33,7 +36,9 @@ class UserProductItem extends StatelessWidget {
                   Icons.delete,
                   color: Theme.of(context).errorColor,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Provider.of<Products>(context).removeProduct(id);
+                },
               )
             ],
           ),
