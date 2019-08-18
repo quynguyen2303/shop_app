@@ -34,8 +34,10 @@ class CartItem extends StatelessWidget {
         return showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Remove Item', 
-            textAlign: TextAlign.center,),
+            title: Text(
+              'Remove Item',
+              textAlign: TextAlign.center,
+            ),
             content: Text('Do you really want to remove this item?'),
             actions: <Widget>[
               FlatButton(
