@@ -58,6 +58,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
 
   void _saveForm() {
     bool isValid = _form.currentState.validate();
+
     if (!isValid) {
       return;
     }
@@ -86,7 +87,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
   void dispose() {
     _imageFocusNode.removeListener(_updateImage);
     _priceFocusNode.dispose();
-    _descriptionFocusNode.debugDescribeChildren();
+    _descriptionFocusNode.dispose();
     _imageUrlController.dispose();
     _imageFocusNode.dispose();
     super.dispose();
