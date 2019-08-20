@@ -15,6 +15,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cartData = Provider.of<Cart>(context, listen: false);
+    final scaffold = Scaffold.of(context);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
@@ -38,8 +39,17 @@ class ProductItem extends StatelessWidget {
               color: Theme.of(context).accentColor,
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
-              onPressed: () {
-                product.toogleFavorite();
+              onPressed: () async {
+                try {
+                  await product.toogleFavorite();
+                } catch (error) {
+                  scaffold.showSnackBar(SnackBar(
+                    content: Text(
+                      error.toString(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                }
               },
             ),
           ),
@@ -60,7 +70,9 @@ class ProductItem extends StatelessWidget {
                   content: Text(
                     'Added item to cart.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black, ),
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
                   duration: Duration(seconds: 2),
                   action: SnackBarAction(
