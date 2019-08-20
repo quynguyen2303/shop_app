@@ -68,14 +68,15 @@ class _UserEditScreenState extends State<UserEditScreen> {
       _isLoading = true;
     });
     // Check it is adding new product or editting product
-    if (_editedProduct.id == null) {
+    if (_editedProduct.id != null) {
+      await Provider.of<Products>(context, listen: false).updateProduct(
+        _editedProduct.id,
+        _editedProduct,
+      );
+    } else {
       try {
-        await Provider.of<Products>(context, listen: false).addProduct(Product(
-            title: _editedProduct.title,
-            price: _editedProduct.price,
-            description: _editedProduct.description,
-            imageUrl: _editedProduct.imageUrl,
-            id: _editedProduct.id));
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
       } catch (error) {
         await showDialog(
             context: context,
@@ -91,22 +92,18 @@ class _UserEditScreenState extends State<UserEditScreen> {
                     )
                   ],
                 ));
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
       }
-    } else {
-      Provider.of<Products>(context, listen: false).updateProduct(
-        _editedProduct.id,
-        _editedProduct,
-      );
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop();
+      // finally {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   Navigator.of(context).pop();
+      // }
     }
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   void dispose() {
