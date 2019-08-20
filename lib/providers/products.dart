@@ -66,14 +66,41 @@ Suspendisse orci erat, venenatis non eros ut, malesuada aliquam ipsum. In arcu e
 ];
 
 class Products with ChangeNotifier {
-  List<Product> _items = loadedProducts;
+  List<Product> _items = [];
 
   List<Product> get items {
     return [..._items];
   }
 
+  Future<void> fetchAndSetProducts() async {
+    const url = 'https://flutter-shop-28335.firebaseio.com/products.json';
+    try {
+      final response = await http.get(url);
+      final extractedResponse =
+          json.decode(response.body) as Map<String, dynamic>;
+      // print(extractedResponse);
+      final List<Product> loadedProducts = [];
+      extractedResponse.forEach((id, prod) {
+        final newProduct = Product(
+          title: prod['title'],
+          description: prod['description'],
+          imageUrl: prod['imageUrl'],
+          price: prod['price'],
+          id: id,
+        );
+        // print(newProduct);
+        loadedProducts.add(newProduct);
+        _items = loadedProducts;
+      });
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
+    }
+  }
+
   Future<void> addProduct(Product product) async {
-    const url = 'https://flutter-shop-28335.firebaseio.com/products';
+    const url = 'https://flutter-shop-28335.firebaseio.com/products.json';
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -98,9 +125,19 @@ class Products with ChangeNotifier {
     }
   }
 
-  void updateProduct(String id, Product product) {
+  Future<void> updateProduct(String id, Product product) async {
     var prodIndex = _items.indexWhere((prod) => prod.id == id);
+    final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json';
+
     if (prodIndex >= 0) {
+      await http.patch(url, body: json.encode(
+        {
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+        }
+      ));
       _items[prodIndex] = product;
     } else {
       print('Cannot find the product id');
