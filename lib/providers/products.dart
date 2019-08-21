@@ -29,7 +29,7 @@ class Products with ChangeNotifier {
           isFavorite: prod['isFavorite'],
           id: id,
         );
-        // print(newProduct);
+        // print(newProduct.id);
         loadedProducts.add(newProduct);
         _items = loadedProducts;
       });
