@@ -21,14 +21,19 @@ class Product with ChangeNotifier {
       @required this.imageUrl,
       this.isFavorite = false});
 
+  void _setFavorite(value) {
+    isFavorite = value;
+    notifyListeners();
+  }
+
   Future<void> toogleFavorite() async {
     final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json';
-    isFavorite = !isFavorite;
-    notifyListeners();
-    final response = await http.patch(url, body: json.encode({'isFavorite': isFavorite}));
+    final oldValue = isFavorite;
+    _setFavorite(!oldValue);
+    final response =
+        await http.patch(url, body: json.encode({'isFavorite': isFavorite}));
     if (response.statusCode >= 400) {
-      isFavorite = !isFavorite;
-      notifyListeners();
+      _setFavorite(oldValue);
       throw HttpException('Cannot add favorite product.');
     }
   }
