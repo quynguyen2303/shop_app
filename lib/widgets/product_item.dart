@@ -71,7 +71,7 @@ class ProductItem extends StatelessWidget {
                     'Added item to cart.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   duration: Duration(seconds: 2),
