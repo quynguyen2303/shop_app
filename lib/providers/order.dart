@@ -31,42 +31,43 @@ class Orders with ChangeNotifier {
     final extractedOrders = json.decode(response.body) as Map<String, dynamic>;
     // print(response.body);
     extractedOrders.forEach((id, orderItem) {
-      final newOrderItem = OrderItem(
-        id: id,
-        amount: orderItem['amount'],
-        date: DateTime.now(),
-        products: orderItem['products']
-            .map((prod) => CartItem(
-                  id: prod['id'],
-                  title: prod['title'],
-                  price: prod['price'],
-                  quantity: prod['quantity'],
-                ))
-            .toList(),
+      loadedOrders.add(
+        OrderItem(
+          id: id,
+          amount: orderItem['amount'],
+          date: DateTime.parse(orderItem['date']),
+          products: (orderItem['products'] as List<dynamic>)
+              .map((cartItem) => CartItem(
+                    id: cartItem['id'],
+                    title: cartItem['title'],
+                    price: cartItem['price'],
+                    quantity: cartItem['quantity'],
+                  ))
+              .toList(),
+        ),
       );
-      loadedOrders.add(newOrderItem);
       _orders = loadedOrders;
     });
   }
 
   Future<void> addOrder(double amount, List<CartItem> products) async {
     const url = 'https://flutter-shop-28335.firebaseio.com/orders.json';
+    final timestamp = DateTime.now();
     try {
       final response = await http.post(url,
           body: json.encode({
             'amount': amount,
             'products': products
-                .map((product) => {
-                      'id': product.id,
-                      'title': product.title,
-                      'quantity': product.quantity,
-                      'price': product.price,
-                      'total': product.price * product.quantity,
+                .map((cartItem) => {
+                      'id': cartItem.id,
+                      'title': cartItem.title,
+                      'quantity': cartItem.quantity,
+                      'price': cartItem.price,
+                      // 'total': product.price * product.quantity,
                     })
                 .toList(),
-            'date': DateTime.now().toString(),
+            'date': timestamp.toIso8601String(),
           }));
-
       // implement add new order
       _orders.insert(
           0,
@@ -74,11 +75,10 @@ class Orders with ChangeNotifier {
             id: json.decode(response.body)['name'],
             amount: amount,
             products: products,
-            date: DateTime.now(),
+            date: timestamp,
           ));
       notifyListeners();
     } catch (error) {
-      print('Failed Order');
       throw error;
     }
   }
