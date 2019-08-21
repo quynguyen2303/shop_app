@@ -6,12 +6,15 @@ import '../providers/order.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
+  // bool _isOrdering = false;
 
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Your Cart'),
       ),
@@ -38,16 +41,25 @@ class CartScreen extends StatelessWidget {
                   FlatButton(
                     child: Text('ORDER NOW'),
                     textColor: Theme.of(context).primaryColor,
-                    onPressed: () {
+                    onPressed: () async {
+                      // _isOrdering = true;
                       final currentOrder =
                           Provider.of<Orders>(context, listen: false);
-                      currentOrder.addOrder(
-                        cart.itemsTotal,
-                        cart.items.values.toList(),
-                      );
-
+                      try {
+                        await currentOrder.addOrder(
+                          cart.itemsTotal,
+                          cart.items.values.toList(),
+                        );
+                        print('Passed');
+                        cart.clear();
+                      } catch (error) {
+                        print(error);
+                        print('Failed');
+                        _scaffoldKey.currentState.showSnackBar(SnackBar(
+                          content: Text("Cannot add order."),
+                        ));
+                      }
                       // Navigator.of(context).pushNamed(OrderScreen.routeName);
-                      cart.clear();
                     },
                   ),
                 ],
