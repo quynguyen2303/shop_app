@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'cart_screen.dart';
 import '../widgets/app_drawer.dart';
 import '../providers/products.dart';
-import '../providers/order.dart';
 
 
 enum FilterOptions { Favorites, All }
@@ -34,7 +33,6 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         });
       });
 
-      Provider.of<Orders>(context).fetchAndSetOrders();
     }
     _isInit = false;
     super.didChangeDependencies();
