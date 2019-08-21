@@ -47,7 +47,7 @@ class _OrderItemState extends State<OrderItem> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(prod.title),
-                            Text('\$${prod.price}'),
+                            Text('${prod.quantity} x \$${prod.price}'),
                           ],
                         ),
                       ).toList()),
