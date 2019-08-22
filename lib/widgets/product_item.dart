@@ -3,6 +3,7 @@ import '../screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
+import '../providers/auth.dart';
 
 class ProductItem extends StatelessWidget {
   // final String imageUrl;
@@ -16,6 +17,7 @@ class ProductItem extends StatelessWidget {
     final product = Provider.of<Product>(context, listen: false);
     final cartData = Provider.of<Cart>(context, listen: false);
     final scaffold = Scaffold.of(context);
+    final authData = Provider.of<Auth>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
@@ -41,7 +43,7 @@ class ProductItem extends StatelessWidget {
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
               onPressed: () async {
                 try {
-                  await product.toogleFavorite();
+                  await product.toogleFavorite(authData.token);
                 } catch (error) {
                   scaffold.showSnackBar(SnackBar(
                     content: Text(
