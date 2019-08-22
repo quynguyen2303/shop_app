@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'dart:convert';
 
 import '../models/http_exception.dart';
@@ -26,15 +27,18 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toogleFavorite(String tokenId) async {
-    final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json?auth=$tokenId';
+  Future<void> toogleFavorite(String tokenId, String userId) async {
+    final url =
+        'https://flutter-shop-28335.firebaseio.com/usersFavorite/$userId/$id.json?auth=$tokenId';
     final oldValue = isFavorite;
     _setFavorite(!oldValue);
-    final response =
-        await http.patch(url, body: json.encode({'isFavorite': isFavorite}));
-    if (response.statusCode >= 400) {
+    Dio dio = Dio();
+
+    try {
+      final response = await dio.put(url, data: isFavorite);
+    } catch (error) {
       _setFavorite(oldValue);
-      throw HttpException('Cannot add favorite product.');
+      print(error.response.data.toString());
     }
   }
 }
