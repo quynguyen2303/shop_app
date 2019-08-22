@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -100,7 +103,25 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  void _showErrorMessage(message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('An Error Occured!'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      )
+    );
+  }
+
+  void _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
@@ -109,11 +130,29 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      // Log user in
-    } else {
-      // Sign user up
+    try {
+      if (_authMode == AuthMode.Login) {
+        // Log user in
+        await Provider.of<Auth>(context, listen: false)
+            .signin(_authData['email'], _authData['password']);
+      } else {
+        // Sign user up
+        await Provider.of<Auth>(context, listen: false)
+            .signup(_authData['email'], _authData['password']);
+      }
+    } catch (error) {
+      final errorMessage = error.response.data['error']['message'];
+      var alertMessage = 'Authentication failed. Try it later.';
+      if (errorMessage.contains('EMAIL_EXISTS')) {  
+        alertMessage = 'The email is arealdy in use.';
+      } else if (errorMessage.contains('EMAIL_NOT_FOUND')) {
+        alertMessage = 'Could not find the email address.';
+      } else if (errorMessage.contains('INVALID_PASSWORD')) {
+        alertMessage = 'The password is invalid.';
+      } 
+      _showErrorMessage(alertMessage);
     }
+
     setState(() {
       _isLoading = false;
     });
