@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'dart:convert';
 
 import './product.dart';
@@ -7,20 +8,29 @@ import '../models/http_exception.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [];
+  final String tokenId;
+
+  Products(this.tokenId, this._items);
 
   List<Product> get items {
     return [..._items];
   }
 
   Future<void> fetchAndSetProducts() async {
-    const url = 'https://flutter-shop-28335.firebaseio.com/products.json';
+    final url = 'https://flutter-shop-28335.firebaseio.com/products.json?auth=$tokenId';
     try {
-      final response = await http.get(url);
-      final extractedResponse =
-          json.decode(response.body) as Map<String, dynamic>;
+      // final response = await http.get(url);
+      // final extractedResponse =
+      //     json.decode(response.body) as Map<String, dynamic>;
       // print(extractedResponse);
+
+      Dio dio = Dio();
+
+      final response = await dio.get(url);
+      // print(response.data);
       final List<Product> loadedProducts = [];
-      extractedResponse.forEach((id, prod) {
+
+      response.data.forEach((id, prod) {
         final newProduct = Product(
           title: prod['title'],
           description: prod['description'],
@@ -35,13 +45,13 @@ class Products with ChangeNotifier {
       });
       notifyListeners();
     } catch (error) {
-      print(error);
+      print(error.response);
       throw error;
     }
   }
 
   Future<void> addProduct(Product product) async {
-    const url = 'https://flutter-shop-28335.firebaseio.com/products.json';
+    final url = 'https://flutter-shop-28335.firebaseio.com/products.json?auth=$tokenId';
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -68,7 +78,7 @@ class Products with ChangeNotifier {
 
   Future<void> updateProduct(String id, Product product) async {
     var prodIndex = _items.indexWhere((prod) => prod.id == id);
-    final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json';
+    final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json?auth=$tokenId';
 
     if (prodIndex >= 0) {
       await http.patch(url,
@@ -87,7 +97,7 @@ class Products with ChangeNotifier {
 
   Future<void> removeProduct(String id) async {
     var prodIndex = _items.indexWhere((prod) => prod.id == id);
-    final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json';
+    final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json?auth=$tokenId';
 
     final Product existingItem = _items.elementAt(prodIndex);
     _items.removeAt(prodIndex);
