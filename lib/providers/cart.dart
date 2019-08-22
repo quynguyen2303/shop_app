@@ -20,6 +20,10 @@ class Cart with ChangeNotifier {
     return {..._items};
   }
 
+  final String tokenId;
+
+  Cart(this.tokenId, this._items);
+
   void addCartItem(String productId, double price, String title) {
     if (_items.containsKey(productId)) {
       // item already exists in cart
