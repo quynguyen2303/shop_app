@@ -26,8 +26,8 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toogleFavorite() async {
-    final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json';
+  Future<void> toogleFavorite(String tokenId) async {
+    final url = 'https://flutter-shop-28335.firebaseio.com/products/$id.json?auth=$tokenId';
     final oldValue = isFavorite;
     _setFavorite(!oldValue);
     final response =
