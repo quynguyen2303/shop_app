@@ -30,7 +30,7 @@ class CartScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   Chip(
-                    label: Text('\$${cart.itemsTotal}'),
+                    label: Text('\$${cart.itemsTotal.toStringAsFixed(2)}'),
                     labelStyle: TextStyle(
                         color: Theme.of(context).primaryTextTheme.title.color),
                     backgroundColor: Theme.of(context).primaryColor,
