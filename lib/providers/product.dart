@@ -1,10 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
-import 'dart:convert';
-
-import '../models/http_exception.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -35,10 +31,18 @@ class Product with ChangeNotifier {
     Dio dio = Dio();
 
     try {
-      final response = await dio.put(url, data: isFavorite);
-    } catch (error) {
-      _setFavorite(oldValue);
-      print(error.response.data.toString());
+      await dio.put(url, data: isFavorite);
+    } on DioError catch (error) {
+      if (error.response != null) {
+        print(error.response.data);
+        print(error.response.headers);
+        print(error.response.request);
+      } else {
+        _setFavorite(oldValue);
+        print(error.message);
+        print(error.request);
+
+      }
     }
   }
 }
